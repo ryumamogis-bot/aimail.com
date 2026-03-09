@@ -1,11 +1,11 @@
+```html
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>RMAIL Login</title>
+<title>RMAIL ログイン</title>
 
 <style>
-
 body{
 font-family:sans-serif;
 background:#f5f7fa;
@@ -16,18 +16,13 @@ height:100vh;
 margin:0;
 }
 
-.loginBox{
+.box{
 background:white;
 padding:40px;
 border-radius:12px;
-box-shadow:0 10px 30px rgba(0,0,0,0.1);
+box-shadow:0 10px 25px rgba(0,0,0,0.1);
 width:320px;
 text-align:center;
-}
-
-h1{
-margin-bottom:30px;
-font-size:32px;
 }
 
 input{
@@ -41,51 +36,40 @@ border:1px solid #ddd;
 button{
 width:100%;
 padding:12px;
-margin-top:10px;
+background:#2b7cff;
+color:white;
 border:none;
 border-radius:8px;
 cursor:pointer;
-font-weight:bold;
-}
-
-.email{
-background:#2b7cff;
-color:white;
+margin-top:10px;
 }
 
 .google{
-background:#4285f4;
-color:white;
+background:#4285F4;
 }
 
 .microsoft{
 background:#333;
-color:white;
 }
-
-hr{
-margin:20px 0;
-}
-
 </style>
 </head>
 
 <body>
 
-<div class="loginBox">
+<div class="box">
 
-<h1>RMAIL</h1>
+<h2>RMAIL ログイン</h2>
 
-<input id="email" placeholder="メールアドレス">
+<input id="email" placeholder="メール">
 <input id="password" type="password" placeholder="パスワード">
 
-<button class="email" onclick="emailLogin()">メールでログイン</button>
+<button onclick="login()">ログイン</button>
 
-<hr>
+<button class="google" onclick="google()">Googleログイン</button>
 
-<button class="google" onclick="googleLogin()">Googleでログイン</button>
+<button class="microsoft" onclick="microsoft()">Microsoftログイン</button>
 
-<button class="microsoft" onclick="microsoftLogin()">Microsoftでログイン</button>
+<p><a href="register.html">新規登録</a></p>
 
 </div>
 
@@ -93,13 +77,13 @@ margin:20px 0;
 
 <script>
 
-const client = new Appwrite.Client()
+const client=new Appwrite.Client()
 .setEndpoint("https://cloud.appwrite.io/v1")
-.setProject("69aeb03c003a1a64c8be")
+.setProject("69aeb448002665910503")
 
-const account = new Appwrite.Account(client)
+const account=new Appwrite.Account(client)
 
-async function emailLogin(){
+async function login(){
 
 const email=document.getElementById("email").value
 const password=document.getElementById("password").value
@@ -108,32 +92,32 @@ try{
 
 await account.createEmailSession(email,password)
 
-alert("ログイン成功")
+location.href="home.html"
 
 }catch(err){
 
-alert("ログイン失敗")
+alert(err.message)
 
 }
 
 }
 
-function googleLogin(){
+function google(){
 
 account.createOAuth2Session(
 "google",
-window.location.href,
-window.location.href
+window.location.origin+"/home.html",
+window.location.origin+"/login.html"
 )
 
 }
 
-function microsoftLogin(){
+function microsoft(){
 
 account.createOAuth2Session(
 "microsoft",
-window.location.href,
-window.location.href
+window.location.origin+"/home.html",
+window.location.origin+"/login.html"
 )
 
 }
@@ -142,3 +126,4 @@ window.location.href
 
 </body>
 </html>
+```
