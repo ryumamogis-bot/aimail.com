@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>RMAIL Login</title>
+
+<style>
+
+body{
+font-family:sans-serif;
+background:#f5f7fa;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+margin:0;
+}
+
+.loginBox{
+background:white;
+padding:40px;
+border-radius:12px;
+box-shadow:0 10px 30px rgba(0,0,0,0.1);
+width:320px;
+text-align:center;
+}
+
+h1{
+margin-bottom:30px;
+font-size:32px;
+}
+
+input{
+width:100%;
+padding:10px;
+margin:8px 0;
+border-radius:8px;
+border:1px solid #ddd;
+}
+
+button{
+width:100%;
+padding:12px;
+margin-top:10px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+font-weight:bold;
+}
+
+.email{
+background:#2b7cff;
+color:white;
+}
+
+.google{
+background:#4285f4;
+color:white;
+}
+
+.microsoft{
+background:#333;
+color:white;
+}
+
+hr{
+margin:20px 0;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="loginBox">
+
+<h1>RMAIL</h1>
+
+<input id="email" placeholder="メールアドレス">
+<input id="password" type="password" placeholder="パスワード">
+
+<button class="email" onclick="emailLogin()">メールでログイン</button>
+
+<hr>
+
+<button class="google" onclick="googleLogin()">Googleでログイン</button>
+
+<button class="microsoft" onclick="microsoftLogin()">Microsoftでログイン</button>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0"></script>
+
+<script>
+
+const client = new Appwrite.Client()
+.setEndpoint("https://cloud.appwrite.io/v1")
+.setProject("69aeb03c003a1a64c8be")
+
+const account = new Appwrite.Account(client)
+
+async function emailLogin(){
+
+const email=document.getElementById("email").value
+const password=document.getElementById("password").value
+
+try{
+
+await account.createEmailSession(email,password)
+
+alert("ログイン成功")
+
+}catch(err){
+
+alert("ログイン失敗")
+
+}
+
+}
+
+function googleLogin(){
+
+account.createOAuth2Session(
+"google",
+window.location.href,
+window.location.href
+)
+
+}
+
+function microsoftLogin(){
+
+account.createOAuth2Session(
+"microsoft",
+window.location.href,
+window.location.href
+)
+
+}
+
+</script>
+
+</body>
+</html>
