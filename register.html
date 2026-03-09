@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>RMAIL 新規登録</title>
+
+<style>
+
+body{
+font-family:sans-serif;
+background:#f5f7fa;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+margin:0;
+}
+
+.box{
+background:white;
+padding:40px;
+border-radius:12px;
+box-shadow:0 10px 30px rgba(0,0,0,0.1);
+width:320px;
+text-align:center;
+}
+
+input{
+width:100%;
+padding:10px;
+margin:8px 0;
+border-radius:8px;
+border:1px solid #ddd;
+}
+
+button{
+width:100%;
+padding:12px;
+background:#2b7cff;
+color:white;
+border:none;
+border-radius:8px;
+cursor:pointer;
+font-weight:bold;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="box">
+
+<h1>RMAIL</h1>
+<p>新規登録</p>
+
+<input id="name" placeholder="ユーザー名">
+<input id="email" placeholder="メール">
+<input id="password" type="password" placeholder="パスワード">
+
+<button onclick="register()">登録</button>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0"></script>
+
+<script>
+
+const client = new Appwrite.Client()
+.setEndpoint("https://cloud.appwrite.io/v1")
+.setProject("69aeb03c003a1a64c8be")
+
+const account = new Appwrite.Account(client)
+
+async function register(){
+
+const name=document.getElementById("name").value
+const email=document.getElementById("email").value
+const password=document.getElementById("password").value
+
+try{
+
+await account.create(
+"unique()",
+email,
+password,
+name
+)
+
+alert("登録成功！ログインしてください")
+
+}catch(e){
+
+alert("登録失敗")
+
+}
+
+}
+
+</script>
+
+</body>
+</html>
