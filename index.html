@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>RMAIL</title>
+
+<style>
+
+body{
+font-family:sans-serif;
+background:#f5f7fa;
+margin:0;
+}
+
+header{
+background:white;
+padding:20px;
+font-size:28px;
+font-weight:bold;
+box-shadow:0 2px 10px rgba(0,0,0,0.05);
+}
+
+.logo{
+color:#2b7cff;
+}
+
+.container{
+max-width:800px;
+margin:auto;
+padding:20px;
+}
+
+#messages{
+height:400px;
+overflow:auto;
+background:white;
+border-radius:10px;
+padding:20px;
+box-shadow:0 5px 15px rgba(0,0,0,0.05);
+margin-bottom:20px;
+}
+
+.message{
+margin-bottom:15px;
+}
+
+.name{
+font-weight:bold;
+color:#2b7cff;
+}
+
+.inputBox{
+display:flex;
+gap:10px;
+}
+
+input{
+flex:1;
+padding:10px;
+border-radius:8px;
+border:1px solid #ddd;
+}
+
+button{
+background:#2b7cff;
+color:white;
+border:none;
+padding:10px 20px;
+border-radius:8px;
+cursor:pointer;
+}
+
+button:hover{
+opacity:0.9;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+<span class="logo">RMAIL</span>
+</header>
+
+<div class="container">
+
+<div id="messages"></div>
+
+<div class="inputBox">
+<input id="name" placeholder="名前">
+<input id="message" placeholder="メッセージ">
+<button onclick="sendMessage()">送信</button>
+</div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0"></script>
+
+<script>
+
+const client = new Appwrite.Client()
+.setEndpoint("https://cloud.appwrite.io/v1")
+.setProject("PROJECT_ID")
+
+const databases = new Appwrite.Databases(client)
+
+const DATABASE_ID="rmail"
+const COLLECTION_ID="messages"
+
+async function sendMessage(){
+
+const name=document.getElementById("name").value
+const text=document.getElementById("message").value
+
+await databases.createDocument(
+DATABASE_ID,
+COLLECTION_ID,
+"unique()",
+{
+user:name,
+text:text,
+time:Date.now()
+})
+
+document.getElementById("message").value=""
+
+loadMessages()
+
+}
+
+async function loadMessages(){
+
+const response=await databases.listDocuments(
+DATABASE_ID,
+COLLECTION_ID
+)
+
+const box=document.getElementById("messages")
+box.innerHTML=""
+
+response.documents.forEach(doc=>{
+
+box.innerHTML+=`
+<div class="message">
+<div class="name">${doc.user}</div>
+<div>${doc.text}</div>
+</div>
+`
+
+})
+
+}
+
+loadMessages()
+
+</script>
+
+</body>
+</html>
