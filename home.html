@@ -1,0 +1,75 @@
+```html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>RMAIL</title>
+
+<style>
+body{
+font-family:sans-serif;
+background:#f5f7fa;
+text-align:center;
+margin-top:100px;
+}
+
+button{
+padding:10px 20px;
+background:#2b7cff;
+color:white;
+border:none;
+border-radius:8px;
+cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<h1>RMAILへようこそ</h1>
+
+<p id="user"></p>
+
+<button onclick="logout()">ログアウト</button>
+
+<script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0"></script>
+
+<script>
+
+const client=new Appwrite.Client()
+.setEndpoint("https://cloud.appwrite.io/v1")
+.setProject("69aeb448002665910503")
+
+const account=new Appwrite.Account(client)
+
+async function check(){
+
+try{
+
+const user=await account.get()
+
+document.getElementById("user").innerText="ログイン中: "+user.email
+
+}catch{
+
+location.href="login.html"
+
+}
+
+}
+
+async function logout(){
+
+await account.deleteSession("current")
+
+location.href="login.html"
+
+}
+
+check()
+
+</script>
+
+</body>
+</html>
+```
